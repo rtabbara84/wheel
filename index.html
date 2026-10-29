@@ -99,36 +99,37 @@
     html,body{overflow:auto;height:auto;min-height:100%;}
     #app{height:auto;min-height:100dvh;padding:10px;gap:10px;}
     header{flex-wrap:wrap;justify-content:center;gap:8px;}
-    .logo{height:56px;padding:4px 10px;border-radius:12px;}
-    h1{flex:1 1 100%;order:3;font-size:clamp(24px,7vw,40px);}
+    #wheel{touch-action:pan-y;}
+    .logo{height:42px;padding:3px 8px;border-radius:10px;}
+    h1{flex:1 1 100%;order:3;font-size:clamp(20px,5.5vw,30px);}
     .top-btns{gap:8px;}
-    .icon-btn{min-width:56px;min-height:56px;padding:0 14px;font-size:18px;border-radius:14px;}
+    .icon-btn{min-width:44px;min-height:44px;padding:0 10px;font-size:14px;border-radius:12px;border-width:2px;}
     main{grid-template-columns:1fr;gap:12px;}
     .wheel-zone{gap:10px;}
     .wheel-wrap{flex:none;width:100%;max-width:min(100%,560px);aspect-ratio:1;}
-    .spin-btn{width:100%;min-height:64px;font-size:clamp(24px,7vw,40px);border-radius:20px;}
-    .hint{font-size:15px;text-align:center;margin-top:0;}
+    .spin-btn{width:100%;min-height:50px;font-size:clamp(20px,5.5vw,28px);border-radius:16px;box-shadow:0 4px 0 #8e1b1b;}
+    .hint{font-size:13px;text-align:center;margin-top:0;}
     .side{display:flex;flex-direction:column;gap:12px;}
     .case-card{min-height:0;padding:12px;gap:12px;border-radius:20px;}
-    .case-emoji{font-size:clamp(48px,16vw,84px);}
-    .case-label{font-size:16px;}
-    .case-text{font-size:clamp(20px,6vw,34px);}
-    .timer{font-size:clamp(56px,20vw,110px);border-radius:20px;border-width:4px;}
-    .status{font-size:16px;min-width:22vw;}
+    .case-emoji{font-size:clamp(36px,11vw,56px);}
+    .case-label{font-size:13px;}
+    .case-text{font-size:clamp(16px,4.6vw,24px);}
+    .timer{font-size:clamp(44px,14vw,72px);border-radius:16px;border-width:3px;}
+    .status{font-size:13px;min-width:22vw;}
     .signs{gap:8px;}
     .sign{padding:10px 4px;border-width:4px;border-radius:16px;}
-    .sign .num{font-size:13px;} .sign .em{font-size:clamp(36px,11vw,64px);}
-    .sign .ttl{font-size:clamp(14px,3.8vw,22px);} .sign .how{font-size:clamp(11px,3vw,15px);}
+    .sign .num{font-size:11px;} .sign .em{font-size:clamp(28px,8vw,44px);}
+    .sign .ttl{font-size:clamp(12px,3.2vw,16px);} .sign .how{font-size:clamp(10px,2.6vw,12px);}
     .sign.selected{outline-width:5px;}
     .sign.selected::after{font-size:13px;top:-12px;padding:2px 10px;}
     .controls{grid-template-columns:repeat(2,1fr);gap:8px;}
-    .ctl{min-height:60px;font-size:clamp(16px,4.4vw,22px);border-radius:16px;}
+    .ctl{min-height:44px;font-size:clamp(13px,3.6vw,16px);border-radius:12px;box-shadow:0 3px 0 rgba(0,0,0,.45);}
     .result{border-width:5px;border-radius:24px;padding:18px 14px;}
-    .result .r-em{font-size:clamp(64px,22vw,110px);}
-    .result .r-ans{font-size:clamp(26px,7.5vw,44px);}
-    .result .r-case{font-size:clamp(17px,4.6vw,26px);}
-    .result .r-why{font-size:clamp(18px,5vw,28px);padding:14px;border-radius:16px;}
-    .result .r-verdict{font-size:clamp(20px,5.6vw,32px);}
+    .result .r-em{font-size:clamp(48px,16vw,72px);}
+    .result .r-ans{font-size:clamp(22px,6vw,32px);}
+    .result .r-case{font-size:clamp(14px,3.8vw,18px);}
+    .result .r-why{font-size:clamp(15px,4vw,20px);padding:14px;border-radius:16px;}
+    .result .r-verdict{font-size:clamp(16px,4.4vw,22px);}
   }
   /* ===== جوال أفقي (شاشة قصيرة): نحافظ على عمودين ===== */
   @media (max-height:520px) and (orientation:landscape){
@@ -489,7 +490,7 @@ document.addEventListener('fullscreenchange',fsLabel);
 document.addEventListener('webkitfullscreenchange',fsLabel);
 
 /* ===== السحب باللمس ===== */
-var dragLastAng=0, samples=[];
+var dragLastAng=0, samples=[], moved=false;
 function ptAngle(e){
   var r=canvas.getBoundingClientRect();
   return Math.atan2(e.clientY-(r.top+r.height/2+H*0.02), e.clientX-(r.left+r.width/2));
@@ -499,14 +500,13 @@ canvas.addEventListener('pointerdown',function(e){
   audio();
   dragging=true; canvas.setPointerCapture(e.pointerId);
   dragLastAng=ptAngle(e); samples=[{t:performance.now(),a:rot}];
-  if(state==='spinning'){ omega=0; }
-  e.preventDefault();
+  moved=false;
 });
 canvas.addEventListener('pointermove',function(e){
   if(!dragging) return;
   var a=ptAngle(e), d=a-dragLastAng;
   if(d>Math.PI) d-=TAU; if(d<-Math.PI) d+=TAU;
-  dragLastAng=a;
+  dragLastAng=a; moved=true;
   if(state!=='spinning'){
     // أول حركة سحب تبدأ جولة جديدة
     if(Math.abs(d)<0.002) return;
@@ -523,6 +523,7 @@ canvas.addEventListener('pointermove',function(e){
 function endDrag(e){
   if(!dragging) return;
   dragging=false;
+  if(!moved) return;
   var now=performance.now(), v=0;
   // نحسب السرعة من آخر 120ms
   var recent=samples.filter(function(s){return now-s.t<120;});
