@@ -94,12 +94,61 @@
   .result .r-verdict{font-size:clamp(26px,4.4vh,56px);margin-bottom:1vh;}
   .result .ctl{margin-top:2.4vh;width:min(420px,100%);background:#8e24aa;}
 
-  @media (max-width:900px){
-    html,body{overflow:auto;}
-    #app{height:auto;}
-    main{grid-template-columns:1fr;}
-    .wheel-wrap{aspect-ratio:1;flex:none;}
-    .controls{grid-template-columns:repeat(2,1fr);}
+  /* ===== جوال / شاشات ضيقة (عمودي) ===== */
+  @media (max-width:900px) and (orientation:portrait), (max-width:640px){
+    html,body{overflow:auto;height:auto;min-height:100%;}
+    #app{height:auto;min-height:100dvh;padding:10px;gap:10px;}
+    header{flex-wrap:wrap;justify-content:center;gap:8px;}
+    .logo{height:56px;padding:4px 10px;border-radius:12px;}
+    h1{flex:1 1 100%;order:3;font-size:clamp(24px,7vw,40px);}
+    .top-btns{gap:8px;}
+    .icon-btn{min-width:56px;min-height:56px;padding:0 14px;font-size:18px;border-radius:14px;}
+    main{grid-template-columns:1fr;gap:12px;}
+    .wheel-zone{gap:10px;}
+    .wheel-wrap{flex:none;width:100%;max-width:min(100%,560px);aspect-ratio:1;}
+    .spin-btn{width:100%;min-height:64px;font-size:clamp(24px,7vw,40px);border-radius:20px;}
+    .hint{font-size:15px;text-align:center;margin-top:0;}
+    .side{display:flex;flex-direction:column;gap:12px;}
+    .case-card{min-height:0;padding:12px;gap:12px;border-radius:20px;}
+    .case-emoji{font-size:clamp(48px,16vw,84px);}
+    .case-label{font-size:16px;}
+    .case-text{font-size:clamp(20px,6vw,34px);}
+    .timer{font-size:clamp(56px,20vw,110px);border-radius:20px;border-width:4px;}
+    .status{font-size:16px;min-width:22vw;}
+    .signs{gap:8px;}
+    .sign{padding:10px 4px;border-width:4px;border-radius:16px;}
+    .sign .num{font-size:13px;} .sign .em{font-size:clamp(36px,11vw,64px);}
+    .sign .ttl{font-size:clamp(14px,3.8vw,22px);} .sign .how{font-size:clamp(11px,3vw,15px);}
+    .sign.selected{outline-width:5px;}
+    .sign.selected::after{font-size:13px;top:-12px;padding:2px 10px;}
+    .controls{grid-template-columns:repeat(2,1fr);gap:8px;}
+    .ctl{min-height:60px;font-size:clamp(16px,4.4vw,22px);border-radius:16px;}
+    .result{border-width:5px;border-radius:24px;padding:18px 14px;}
+    .result .r-em{font-size:clamp(64px,22vw,110px);}
+    .result .r-ans{font-size:clamp(26px,7.5vw,44px);}
+    .result .r-case{font-size:clamp(17px,4.6vw,26px);}
+    .result .r-why{font-size:clamp(18px,5vw,28px);padding:14px;border-radius:16px;}
+    .result .r-verdict{font-size:clamp(20px,5.6vw,32px);}
+  }
+  /* ===== جوال أفقي (شاشة قصيرة): نحافظ على عمودين ===== */
+  @media (max-height:520px) and (orientation:landscape){
+    #app{padding:6px 10px;gap:6px;}
+    .logo{height:40px;padding:2px 8px;}
+    h1{font-size:22px;}
+    .icon-btn{min-width:48px;min-height:48px;font-size:16px;padding:0 10px;border-radius:12px;}
+    .spin-btn{min-height:52px;font-size:24px;border-radius:16px;}
+    .hint{display:none;}
+    .case-card{min-height:0;padding:6px 10px;border-width:3px;border-radius:16px;}
+    .case-emoji{font-size:44px;} .case-text{font-size:20px;} .case-label{font-size:13px;}
+    .timer{font-size:56px;border-width:3px;border-radius:16px;}
+    .status{font-size:14px;}
+    .sign{padding:4px;border-width:3px;border-radius:14px;gap:2px;}
+    .sign .num,.sign .how{display:none;} .sign .em{font-size:34px;} .sign .ttl{font-size:14px;}
+    .ctl{min-height:48px;font-size:15px;border-radius:14px;}
+    .result{padding:12px 18px;border-width:5px;} .result .r-em{font-size:56px;}
+    .result .r-ans{font-size:26px;margin:2px 0;} .result .r-case{font-size:16px;margin-bottom:6px;}
+    .result .r-why{font-size:18px;padding:10px;} .result .ctl{margin-top:8px;}
+    .result .r-verdict{font-size:20px;}
   }
 </style>
 </head>
